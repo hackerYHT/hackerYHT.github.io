@@ -514,10 +514,10 @@ pre code {
   text-shadow: none;
 }
 pre .deletion {
-  background: #fdd;
+  background: #800000;
 }
 pre .addition {
-  background: #dfd;
+  background: #008000;
 }
 pre .meta {
   color: #eab700;
@@ -1220,7 +1220,7 @@ pre .javascript .function {
 }
 .links-of-author a::before,
 .links-of-author span.exturl::before {
-  background: #853bb9;
+  background: #cd1aff;
   border-radius: 50%;
   content: ' ';
   display: inline-block;
@@ -2572,7 +2572,6 @@ ul.breadcrumb li + li:last-child {
   box-sizing: border-box;
   color: var(--text-color);
   width: 240px;
-  opacity: 0;
 }
 .sidebar-inner.affix {
   position: fixed;
@@ -2777,7 +2776,6 @@ ul.breadcrumb li + li:last-child {
   }
 }
 .post {
-  opacity: 0;
   margin-top: 60px;
   margin-bottom: 60px;
   padding: 25px;
