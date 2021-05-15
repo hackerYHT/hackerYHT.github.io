@@ -1220,7 +1220,7 @@ pre .javascript .function {
 }
 .links-of-author a::before,
 .links-of-author span.exturl::before {
-  background: #cd1aff;
+  background: #a8ff6e;
   border-radius: 50%;
   content: ' ';
   display: inline-block;
@@ -1562,6 +1562,16 @@ pre .javascript .function {
     left: 20px;
     opacity: 0.8;
   }
+}
+.reading-progress-bar {
+  background: #37c6c0;
+  display: block;
+  height: 3px;
+  left: 0;
+  position: fixed;
+  width: 0;
+  z-index: 1500;
+  top: 0;
 }
 .post-body {
   font-family: 'Lato', "PingFang SC", "Microsoft YaHei", sans-serif;
@@ -2572,6 +2582,7 @@ ul.breadcrumb li + li:last-child {
   box-sizing: border-box;
   color: var(--text-color);
   width: 240px;
+  opacity: 0;
 }
 .sidebar-inner.affix {
   position: fixed;
@@ -2783,7 +2794,7 @@ ul.breadcrumb li + li:last-child {
   -moz-box-shadow: 0 0 5px rgba(202,203,204,0.5);
 }
 body {
-  background: url("https://img1.baidu.com/it/u=3949459162,1277590300&fm=26&fmt=auto&gp=0.jpg");
+  background: url("https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=1708760552,1570400588&fm=26&gp=0.jpg");
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-size: cover;
