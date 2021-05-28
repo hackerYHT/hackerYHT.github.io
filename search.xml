@@ -1,6 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>剑指offer</title>
+    <url>/2021/05/28/%E5%89%91%E6%8C%87offer/</url>
+    <content><![CDATA[<h1 id="剑指offer"><a href="#剑指offer" class="headerlink" title="剑指offer"></a>剑指offer</h1><h2 id="动态规划"><a href="#动态规划" class="headerlink" title="动态规划"></a>动态规划</h2><h4 id="剑指-Offer-14-I-剪绳子"><a href="#剑指-Offer-14-I-剪绳子" class="headerlink" title="剑指 Offer 14- I. 剪绳子"></a><a href="https://leetcode-cn.com/problems/jian-sheng-zi-lcof/">剑指 Offer 14- I. 剪绳子</a></h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">cuttingRope</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//动态规划：dp定义：当长度为i的时候，可以得到的最大乘积</span></span><br><span class="line">        <span class="keyword">int</span>[] dp = <span class="keyword">new</span> <span class="keyword">int</span>[n + <span class="number">1</span>];</span><br><span class="line">        dp[<span class="number">2</span>] = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">3</span>; i &lt; n + <span class="number">1</span>; i++)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">2</span>; j &lt; i; j++)&#123;</span><br><span class="line">                dp[i] = Math.max(dp[i], Math.max(j * (i - j), j * dp[i - j]));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> dp[n];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="comment">//思路二：贪心</span></span><br><span class="line">    <span class="comment">//核心思路是：尽可能把绳子分成长度为3的小段，这样乘积最大</span></span><br><span class="line">    <span class="comment">//如果 n == 2，返回1，如果 n == 3，返回2，两个可以合并成n小于4的时候返回n - 1</span></span><br><span class="line">    <span class="comment">//如果 n == 4，返回4</span></span><br><span class="line">    <span class="comment">//如果 n &gt; 4，分成尽可能多的长度为3的小段，每次循环长度n减去3，乘积res乘以3；最后返回时乘以小于等于4的最后一小段</span></span><br><span class="line">    <span class="comment">//以上2和3可以合并</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">cuttingRope</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(n &lt; <span class="number">4</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> n - <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span>(n &gt; <span class="number">4</span>)&#123;</span><br><span class="line">            res *= <span class="number">3</span>;</span><br><span class="line">            n -= <span class="number">3</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res * n;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+]]></content>
+      <categories>
+        <category>-LeeCode刷题</category>
+      </categories>
+      <tags>
+        <tag>LeeCode</tag>
+        <tag>算法</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>面经</title>
     <url>/2021/05/26/%E9%9D%A2%E7%BB%8F/</url>
     <content><![CDATA[<p>[TOC]</p>
@@ -108,6 +142,10 @@
 </blockquote>
 <h3 id="JVM"><a href="#JVM" class="headerlink" title="JVM"></a>JVM</h3><h4 id="内存结构"><a href="#内存结构" class="headerlink" title="内存结构"></a>内存结构</h4><h4 id="垃圾回收"><a href="#垃圾回收" class="headerlink" title="垃圾回收"></a>垃圾回收</h4><p>4.jvm内存结构 垃圾回收 算法<br>5.数据库设计 学生 成绩表，如何查询，sql脚本怎么写<br>6.两道简单的 算法 ，两个栈实习队列，归并 排序 。<br>7.反问 </p>
 <p>2.设计模式<br>3.写一下单例模式<br>双重校验锁式为什么要比较两次？<br>4.现在还记得几种 排序 算法 ？时间复杂度怎么样？<br>写一下堆排，计算一下维护大根堆的时间复杂度<br>5.Java的垃圾回收 算法 ，可作为GCROOTS的对象<br>6.对Arraylist和LinkedList的理解<br>7.对HashMap的了解？<br>\8. 红黑树 和AVL树的区别？<br>9.进程间通信的方式有哪些？<br>10.最小生成树 算法 ？Prim 算法 的思想<br>\11. 项目 ， 项目 中遇到的问题，怎么解决的？<br>12.线程和协程的区别？<br>13.C#和Java有什么区别？<br>14.以后有什么规划？</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">docker run -di --name rabbitmq -e RABBITMQ_DEFAULT_USER=yht  -e RABBITMQ_DEFAULT_PASS=yht1128 -p 15672:15672 -p 5672:5672 -p 25672:25672 -p 61613:61613 -p 1883:1883 rabbitmq:management</span><br></pre></td></tr></table></figure>
+
+<p><a href="https://www.cnblogs.com/my-ordinary/p/12254853.html">https://www.cnblogs.com/my-ordinary/p/12254853.html</a></p>
+<p>踩坑：必须在阿里云安全组规则添加端口号</p>
 ]]></content>
       <categories>
         <category>面经</category>
@@ -355,50 +393,21 @@
 
 <h3 id="LeeCode70-爬楼梯"><a href="#LeeCode70-爬楼梯" class="headerlink" title="LeeCode70_爬楼梯"></a>LeeCode70_爬楼梯</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">climbStairs</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//动态规划+空间压缩（dp数组压缩成3个变量）</span></span><br><span class="line">        <span class="keyword">if</span>(n == <span class="number">1</span>) <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">if</span>(n == <span class="number">2</span>) <span class="keyword">return</span> <span class="number">2</span>;</span><br><span class="line">        <span class="keyword">int</span> dp_0 = <span class="number">1</span>, dp_1 = <span class="number">2</span>, dp_2 = <span class="number">2</span>;<span class="comment">//base case</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">2</span>; i &lt; n; i++)&#123;</span><br><span class="line">            dp_2 = dp_0 + dp_1;<span class="comment">//状态转移方程</span></span><br><span class="line">            dp_0 = dp_1;</span><br><span class="line">            dp_1 = dp_2;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> dp_2;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 
-<h3 id="LeeCode121-买卖股票的最佳时机"><a href="#LeeCode121-买卖股票的最佳时机" class="headerlink" title="LeeCode121_买卖股票的最佳时机"></a>LeeCode121_买卖股票的最佳时机</h3><p>方法二：动态规划<br>思路：题目只问最大利润，没有问这几天具体哪一天买、哪一天卖，因此可以考虑使用 动态规划 的方法来解决。</p>
-<p>买卖股票有约束，根据题目意思，有以下两个约束条件：</p>
-<p>条件 1：你不能在买入股票前卖出股票；<br>条件 2：最多只允许完成一笔交易。<br>因此 当天是否持股 是一个很重要的因素，而当前是否持股和昨天是否持股有关系，为此我们需要把 是否持股 设计到状态数组中。</p>
-<p>状态定义：</p>
-<p>dp[i][j]：下标为 i 这一天结束的时候，手上持股状态为 j 时，我们持有的现金数。</p>
-<p>j = 0，表示当前不持股；<br>j = 1，表示当前持股。<br>注意：这个状态具有前缀性质，下标为 i 的这一天的计算结果包含了区间 [0, i] 所有的信息，因此最后输出 dp[len - 1][0]。</p>
-<p>说明：</p>
-<p>使用「现金数」这个说法主要是为了体现 买入股票手上的现金数减少，卖出股票手上的现金数增加 这个事实；<br>「现金数」等价于题目中说的「利润」，即先买入这只股票，后买入这只股票的差价；<br>因此在刚开始的时候，我们的手上肯定是有一定现金数能够买入这只股票，即刚开始的时候现金数肯定不为 00，但是写代码的时候可以设置为 0。极端情况下（股价数组为 [5, 4, 3, 2, 1]），此时不发生交易是最好的（这一点是补充说明，限于我的表达，希望不要给大家造成迷惑）。<br>推导状态转移方程：</p>
-<p>dp[i][0]：规定了今天不持股，有以下两种情况：</p>
-<p>昨天不持股，今天什么都不做；<br>昨天持股，今天卖出股票（现金数增加），<br>dp[i][1]：规定了今天持股，有以下两种情况：</p>
-<p>昨天持股，今天什么都不做（现金数与昨天一样）；<br>昨天不持股，今天买入股票（注意：只允许交易一次，因此手上的现金数就是当天的股价的相反数）。<br>状态转移方程请见 参考代码 2。</p>
-<p>知识点：</p>
-<p>多阶段决策问题：动态规划常常用于求解多阶段决策问题；<br>无后效性：每一天是否持股设计成状态变量的一维。状态设置具体，推导状态转移方程方便。<br>参考代码 2：</p>
-<pre><code>public int maxProfit(int[] prices) &#123;
-    int len = prices.length;
-    // 特殊判断
-    if (len &lt; 2) &#123;
-        return 0;
-    &#125;
-    int[][] dp = new int[len][2];
+<h3 id="剑指offer63-买卖股票的最佳时机"><a href="#剑指offer63-买卖股票的最佳时机" class="headerlink" title="剑指offer63_买卖股票的最佳时机"></a>剑指offer63_买卖股票的最佳时机</h3><ul>
+<li>动态规划解析：<ul>
+<li>状态定义： 设动态规划列表 dpdp ，dp[i]dp[i] 代表以 prices[i]prices[i] 为结尾的子数组的最大利润（以下简称为 前 ii 日的最大利润 ）。</li>
+<li>转移方程： 由于题目限定 “买卖该股票一次” ，因此前 ii 日最大利润 dp[i]dp[i] 等于前 i - 1i−1 日最大利润 dp[i-1]dp[i−1] 和第 ii 日卖出的最大利润中的最大值。<br>前 i 日最大利润 = \max(前 (i-1) 日最大利润, 第 i 日价格 - 前 i 日最低价格)<br>前i日最大利润=max(前(i−1)日最大利润,第i日价格−前i日最低价格)</li>
+</ul>
+</li>
+</ul>
+<p>dp[i] = \max(dp[i - 1], prices[i] - \min(prices[0:i]))<br>dp[i]=max(dp[i−1],prices[i]−min(prices[0:i]))</p>
+<p>初始状态： dp[0] = 0dp[0]=0 ，即首日利润为 00 ；<br>返回值： dp[n - 1]dp[n−1] ，其中 nn 为 dpdp 列表长度。</p>
+<p>效率优化：<br>时间复杂度降低： 前 ii 日的最低价格 \min(prices[0:i])min(prices[0:i]) 时间复杂度为 O(i)O(i) 。而在遍历 pricesprices 时，可以借助一个变量（记为成本 costcost ）每日更新最低价格。优化后的转移方程为：<br>dp[i] = \max(dp[i - 1], prices[i] - \min(cost, prices[i])<br>dp[i]=max(dp[i−1],prices[i]−min(cost,prices[i])</p>
+<p>空间复杂度降低： 由于 dp[i]dp[i] 只与 dp[i - 1]dp[i−1] , prices[i]prices[i] , costcost 相关，因此可使用一个变量（记为利润 profitprofit ）代替 dpdp 列表。优化后的转移方程为：<br>profit = \max(profit, prices[i] - \min(cost, prices[i])<br>profit=max(profit,prices[i]−min(cost,prices[i])</p>
+<p><img src="https://pic.leetcode-cn.com/4880911383c41712612103c612e390f1ee271e4eb921f22476836dc46aa3a58a-Picture1.png" alt="nnn"></p>
+<p>复杂度分析：<br>时间复杂度 O(N)O(N) ： 其中 NN 为 pricesprices 列表长度，动态规划需遍历 pricesprices 。<br>空间复杂度 O(1)O(1) ： 变量 costcost 和 profitprofit 使用常数大小的额外空间。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">maxProfit</span><span class="params">(<span class="keyword">int</span>[] prices)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> cost = Integer.MAX_VALUE, profit = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> price : prices) &#123;</span><br><span class="line">            cost = Math.min(cost, price);</span><br><span class="line">            profit = Math.max(profit, price - cost);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> profit;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-    // dp[i][0] 下标为 i 这天结束的时候，不持股，手上拥有的现金数
-    // dp[i][1] 下标为 i 这天结束的时候，持股，手上拥有的现金数
-
-    // 初始化：不持股显然为 0，持股就需要减去第 1 天（下标为 0）的股价
-    dp[0][0] = 0;
-    dp[0][1] = -prices[0];
-
-    // 从第 2 天开始遍历
-    for (int i = 1; i &lt; len; i++) &#123;
-        dp[i][0] = Math.max(dp[i - 1][0], dp[i - 1][1] + prices[i]);
-        dp[i][1] = Math.max(dp[i - 1][1], -prices[i]);
-    &#125;
-    return dp[len - 1][0];
-&#125;
-</code></pre>
-<p>}<br>复杂度分析：</p>
-<p>时间复杂度：O(N)O(N)，遍历股价数组可以得到最优解；<br>空间复杂度：O(N)O(N)，状态数组的长度为 NN。</p>
-<blockquote>
-<p>个人总结：</p>
-<p>状态：日期、持有与否</p>
-<p>选择：<code>max</code>{昨日持有与否决定了今天的持有与否}</p>
-<p>dp数组中存储着当天现金</p>
-</blockquote>
 <h3 id="LeeCode64-最小路径和"><a href="#LeeCode64-最小路径和" class="headerlink" title="LeeCode64_最小路径和"></a>LeeCode64_最小路径和</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">minPathSum</span><span class="params">(<span class="keyword">int</span>[][] grid)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//动态规划：二位dp数组，下标存储当前行列状态</span></span><br><span class="line">        <span class="comment">//数组意义：当第i行第j列时，grid[0][0]到grid[i][j]的最短路径</span></span><br><span class="line">        <span class="keyword">int</span>[][] dp = <span class="keyword">new</span> <span class="keyword">int</span>[grid.length][grid[<span class="number">0</span>].length];</span><br><span class="line">        dp[<span class="number">0</span>][<span class="number">0</span>] = grid[<span class="number">0</span>][<span class="number">0</span>];</span><br><span class="line">        <span class="comment">//base case</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; grid.length; i++)</span><br><span class="line">            dp[i][<span class="number">0</span>] = grid[i][<span class="number">0</span>] + dp[i-<span class="number">1</span>][<span class="number">0</span>];</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; grid[<span class="number">0</span>].length; i++)</span><br><span class="line">            dp[<span class="number">0</span>][i] = grid[<span class="number">0</span>][i] + dp[<span class="number">0</span>][i-<span class="number">1</span>];</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; grid.length; i++)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">1</span>; j &lt; grid[<span class="number">0</span>].length; j++)&#123;</span><br><span class="line">                dp[i][j] = Math.min(grid[i][j] + dp[i-<span class="number">1</span>][j], </span><br><span class="line">                    grid[i][j] + dp[i][j-<span class="number">1</span>]);<span class="comment">//状态转移方程</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> dp[grid.length-<span class="number">1</span>][grid[<span class="number">0</span>].length-<span class="number">1</span>];</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 
 <h3 id="LeeCode72-最小编辑距离"><a href="#LeeCode72-最小编辑距离" class="headerlink" title="LeeCode72_最小编辑距离"></a>LeeCode72_最小编辑距离</h3><blockquote>
