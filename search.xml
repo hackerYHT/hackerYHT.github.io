@@ -142,32 +142,58 @@
 <p>第一种使用 new 创建的对象，存放在堆中。每次调用都会创建一个新的对象。</p>
 <p>第二种先在栈上创建一个 String 类的对象引用变量 str，然后通过符号引用去字符串常量池中找有没有 “abcd”，如果没有，则将“abcd”存放到字符串常量池中，并将栈上的 str 变量引用指向常量池中的“abcd”。如果常量池中已经有“abcd”了，则不会再常量池中创建“abcd”，而是直接将 str 引用指向常量池中的“abcd”。</p>
 <p>对于 String 类，equals 方法用于比较字符串内容是否相同； == 号用于比较内存地址是否相同，即是否指向同一个对象。</p>
-<h4 id="JVM垃圾回收算法"><a href="#JVM垃圾回收算法" class="headerlink" title="JVM垃圾回收算法"></a>JVM垃圾回收算法</h4><blockquote>
+<h4 id="JVM垃圾回收算法"><a href="#JVM垃圾回收算法" class="headerlink" title="JVM垃圾回收算法"></a>JVM垃圾回收算法</h4><p><a href="https://blog.csdn.net/weixin_43213517/article/details/89853530">参考博客</a></p>
+<blockquote>
 <p>两个概念：<br>新生代：存放生命周期较短的对象的区域。<br>老年代：存放生命周期较长的对象的区域。</p>
 </blockquote>
 <p>相同点： 都在Java堆上</p>
-<h5 id="标记–清除算法"><a href="#标记–清除算法" class="headerlink" title="标记–清除算法"></a>标记–清除算法</h5><p>执行步骤：</p>
-<p>标记：遍历内存区域，对需要回收的对象打上标记。<br>清除：再次遍历内存，对已经标记过的内存进行回收。<br>图解：</p>
-<p>缺点：</p>
-<p>效率问题；遍历了两次内存空间（第一次标记，第二次清除）。<br>空间问题：容易产生大量内存碎片，当再需要一块比较大的内存时，无法找到一块满足要求的，因而不得不再次出发GC。<br>2.复制算法<br>将内存划分为等大的两块，每次只使用其中的一块。当一块用完了，触发GC时，将该块中存活的对象复制到另一块区域，然后一次性清理掉这块没有用的内存。下次触发GC时将那块中存活的的又复制到这块，然后抹掉那块，循环往复。</p>
-<p>图解：</p>
-<p>优点</p>
-<p>相对于标记–清理算法解决了内存的碎片化问题。<br>效率更高（清理内存时，记住首尾地址，一次性抹掉）。<br>缺点：</p>
-<p>内存利用率不高，每次只能使用一半内存。<br>改进<br>研究表明，新生代中的对象大都是“朝生夕死”的，即生命周期非常短而且对象活得越久则越难被回收。在发生GC时，需要回收的对象特别多，存活的特别少，因此需要搬移到另一块内存的对象非常少，所以不需要1：1划分内存空间。而是将整个新生代按照8 ： 1 ： 1的比例划分为三块，最大的称为Eden（伊甸园）区，较小的两块分别称为To Survivor和From Survivor。</p>
+<h5 id="标记–清除算法"><a href="#标记–清除算法" class="headerlink" title="标记–清除算法"></a>标记–清除算法</h5><ul>
+<li>执行步骤：<ul>
+<li>标记：遍历内存区域，对需要回收的对象打上标记。</li>
+<li>清除：再次遍历内存，对已经标记过的内存进行回收。</li>
+</ul>
+</li>
+</ul>
+<p><strong>图解</strong>：</p>
+<p><img src="https://img-blog.csdnimg.cn/20190505183834528.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzIxMzUxNw==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p><img src="https://img-blog.csdnimg.cn/20190505183935598.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzIxMzUxNw==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<ul>
+<li>缺点：<ul>
+<li>效率问题；遍历了两次内存空间（第一次标记，第二次清除）。</li>
+<li>空间问题：容易产生大量内存碎片，当再需要一块比较大的内存时，无法找到一块满足要求的，因而不得不再次出发GC。</li>
+</ul>
+</li>
+</ul>
+<h5 id="复制算法"><a href="#复制算法" class="headerlink" title="复制算法"></a>复制算法</h5><ul>
+<li>执行步骤：将内存划分为等大的两块，每次只使用其中的一块。当一块用完了，触发GC时，将该块中存活的对象复制到另一块区域，然后一次性清理掉这块没有用的内存。下次触发GC时将那块中存活的的又复制到这块，然后抹掉那块，循环往复。</li>
+</ul>
+<p><strong>图解</strong>：</p>
+<p><img src="https://img-blog.csdnimg.cn/20190505185528553.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzIxMzUxNw==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p><img src="https://img-blog.csdnimg.cn/20190505185631986.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzIxMzUxNw==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p><strong>优点</strong></p>
+<p>相对于标记–清理算法解决了内存的碎片化问题。<br>效率更高（清理内存时，记住首尾地址，一次性抹掉）。<br><strong>缺点</strong>：</p>
+<p>内存利用率不高，每次只能使用一半内存。<br><strong>改进</strong>：<br>研究表明，新生代中的对象大都是“朝生夕死”的，即生命周期非常短而且对象活得越久则越难被回收。在发生GC时，需要回收的对象特别多，存活的特别少，因此需要搬移到另一块内存的对象非常少，所以不需要1：1划分内存空间。而是将整个新生代按照8 ： 1 ： 1的比例划分为三块，最大的称为Eden（伊甸园）区，较小的两块分别称为To Survivor和From Survivor。</p>
 <p>首次GC时，只需要将Eden存活的对象复制到To。然后将Eden区整体回收。再次GC时，将Eden和To存活的复制到From，循环往复这个过程。这样每次新生代中可用的内存就占整个新生代的90%，大大提高了内存利用率。</p>
 <p>但不能保证每次存活的对象就永远少于新生代整体的10%，此时复制过去是存不下的，因此这里会用到另一块内存，称为老年代，进行分配担保，将对象存储到老年代。若还不够，就会抛出OOM。</p>
 <p>老年代：存放新生代中经过多次回收仍然存活的对象（默认15次）。</p>
-<ol start="3">
-<li>标记–整理算法<br>因为前面的复制算法当对象的存活率比较高时，这样一直复制过来，复制过去，没啥意义，且浪费时间。所以针对老年代提出了“标记整理”算法。</li>
-</ol>
-<p>执行步骤：</p>
-<p>标记：对需要回收的进行标记<br>整理：让存活的对象，向内存的一端移动，然后直接清理掉没有用的内存。<br>图解：</p>
-<ol start="4">
-<li>分代收集算法<br>当前大多商用虚拟机都采用这种分代收集算法，这个算法并没有新的内容，只是根据对象的存活的时间的长短，将内存分为了新生代和老年代，这样就可以针对不同的区域，采取对应的算法。如：</li>
-</ol>
-<p>新生代，每次都有大量对象死亡，有老年代作为内存担保，采取复制算法。<br>老年代，对象存活时间长，采用标记整理，或者标记清理算法都可。<br>MinorGC和FullGC的区别<br>MinorGC：发生在新生代的垃圾回收，因为新生代的特点，MinorGC非常频繁，且回收速度比较快，每次回收的量也很大。<br>FullGC：发生在老年代的垃圾回收，也称MajorGC，速度比较慢，相对于MinorGc慢10倍左右。进行一次FullGC通常会伴有多次多次MinorGC,。</p>
-<p>4.jvm内存结构 垃圾回收 算法<br>5.数据库设计 学生 成绩表，如何查询，sql脚本怎么写<br>6.两道简单的 算法 ，两个栈实习队列，归并 排序 。<br>7.反问 </p>
-<p>2.设计模式<br>3.写一下单例模式<br>双重校验锁式为什么要比较两次？<br>4.现在还记得几种 排序 算法 ？时间复杂度怎么样？<br>写一下堆排，计算一下维护大根堆的时间复杂度<br>5.Java的垃圾回收 算法 ，可作为GCROOTS的对象<br>6.对Arraylist和LinkedList的理解<br>7.对HashMap的了解？<br>\8. 红黑树 和AVL树的区别？<br>9.进程间通信的方式有哪些？<br>10.最小生成树 算法 ？Prim 算法 的思想<br>\11. 项目 ， 项目 中遇到的问题，怎么解决的？<br>12.线程和协程的区别？<br>13.C#和Java有什么区别？<br>14.以后有什么规划？</p>
+<h5 id="标记–整理算法"><a href="#标记–整理算法" class="headerlink" title="标记–整理算法"></a>标记–整理算法</h5><p>因为前面的复制算法当对象的存活率比较高时，这样一直复制过来，复制过去，没啥意义，且浪费时间。所以针对老年代提出了“标记整理”算法。</p>
+<ul>
+<li>执行步骤：<ul>
+<li>标记：对需要回收的进行标记</li>
+<li>整理：让存活的对象，向内存的一端移动，然后直接清理掉没有用的内存。</li>
+</ul>
+</li>
+</ul>
+<p><strong>图解</strong>：</p>
+<p><img src="https://img-blog.csdnimg.cn/20190505192310919.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzIxMzUxNw==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p><img src="https://img-blog.csdnimg.cn/20190505192333188.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzIxMzUxNw==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h5 id="分代收集算法"><a href="#分代收集算法" class="headerlink" title="分代收集算法"></a>分代收集算法</h5><p>当前大多商用虚拟机都采用这种分代收集算法，这个算法并没有新的内容，只是根据对象的存活的时间的长短，将内存分为了新生代和老年代，这样就可以针对不同的区域，采取对应的算法。如：</p>
+<p>新生代，每次都有大量对象死亡，有老年代作为内存担保，采取复制算法。<br>老年代，对象存活时间长，采用标记整理，或者标记清理算法都可。</p>
+<h5 id="MinorGC和FullGC的区别"><a href="#MinorGC和FullGC的区别" class="headerlink" title="MinorGC和FullGC的区别"></a>MinorGC和FullGC的区别</h5><ul>
+<li>MinorGC：发生在新生代的垃圾回收，因为新生代的特点，MinorGC非常频繁，且回收速度比较快，每次回收的量也很大。</li>
+<li>FullGC：发生在老年代的垃圾回收，也称MajorGC，速度比较慢，相对于MinorGc慢10倍左右。进行一次FullGC通常会伴有多次多次MinorGC,。</li>
+</ul>
+<h2 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h2><h3 id="排序"><a href="#排序" class="headerlink" title="排序"></a>排序</h3><h4 id="归并排序"><a href="#归并排序" class="headerlink" title="归并排序"></a>归并排序</h4><p>2.设计模式<br>3.写一下单例模式<br>双重校验锁式为什么要比较两次？<br>4.现在还记得几种 排序 算法 ？时间复杂度怎么样？<br>写一下堆排，计算一下维护大根堆的时间复杂度<br>5.Java的垃圾回收 算法 ，可作为GCROOTS的对象<br>6.对Arraylist和LinkedList的理解<br>7.对HashMap的了解？<br>\8. 红黑树 和AVL树的区别？<br>9.进程间通信的方式有哪些？<br>10.最小生成树 算法 ？Prim 算法 的思想<br>\11. 项目 ， 项目 中遇到的问题，怎么解决的？<br>12.线程和协程的区别？<br>13.C#和Java有什么区别？<br>14.以后有什么规划？</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">docker run -di --name rabbitmq -e RABBITMQ_DEFAULT_USER=yht  -e RABBITMQ_DEFAULT_PASS=yht1128 -p 15672:15672 -p 5672:5672 -p 25672:25672 -p 61613:61613 -p 1883:1883 rabbitmq:management</span><br></pre></td></tr></table></figure>
 
 <p><a href="https://www.cnblogs.com/my-ordinary/p/12254853.html">https://www.cnblogs.com/my-ordinary/p/12254853.html</a></p>
