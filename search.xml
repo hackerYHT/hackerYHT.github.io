@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>SpringBoot_Note</title>
+    <url>/2021/06/03/SpringBoot-Note/</url>
+    <content><![CDATA[<h1 id="SpringBoot-Note"><a href="#SpringBoot-Note" class="headerlink" title="SpringBoot_Note"></a>SpringBoot_Note</h1><span id="more"></span>
+
+<h2 id="自动装配原理"><a href="#自动装配原理" class="headerlink" title="自动装配原理"></a>自动装配原理</h2><h2 id="yml配置文件语法"><a href="#yml配置文件语法" class="headerlink" title="yml配置文件语法"></a>yml配置文件语法</h2><h2 id="IDEA快捷键"><a href="#IDEA快捷键" class="headerlink" title="IDEA快捷键"></a>IDEA快捷键</h2><ul>
+<li>ALT + INSERT –&gt; 在类添加有参构造器、无参构造器、get（）、set（）；</li>
+<li></li>
+</ul>
+]]></content>
+      <categories>
+        <category>java</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>小叶的报告</title>
     <url>/2021/05/31/%E5%B0%8F%E5%8F%B6%E7%9A%84%E6%8A%A5%E5%91%8A/</url>
     <content><![CDATA[<p>亲爱的囡囡：<br>        以下内容在哪个位置如果过于肉麻引起不适，请及时停止，毕竟我是个有身份证的人，要脸。。。</p>
