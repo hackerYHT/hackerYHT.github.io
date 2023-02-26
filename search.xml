@@ -4,6 +4,56 @@
   
     
     <entry>
+      <title>数据库学习之事务操作</title>
+      <link href="/2023/02/26/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AD%A6%E4%B9%A0%E4%B9%8B%E4%BA%8B%E5%8A%A1%E6%93%8D%E4%BD%9C/"/>
+      <url>/2023/02/26/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AD%A6%E4%B9%A0%E4%B9%8B%E4%BA%8B%E5%8A%A1%E6%93%8D%E4%BD%9C/</url>
+      
+        <content type="html"><![CDATA[<h1 id="数据库学习之事务操作"><a href="#数据库学习之事务操作" class="headerlink" title="数据库学习之事务操作"></a>数据库学习之事务操作</h1><h2 id="引入"><a href="#引入" class="headerlink" title="引入"></a>引入</h2><p>我们在买票的时候，两人同时买票，如果不加以处理，那么两个人可能会买到同一张票</p><h2 id="CURD满足什么属性，能解决上述问题？"><a href="#CURD满足什么属性，能解决上述问题？" class="headerlink" title="CURD满足什么属性，能解决上述问题？"></a>CURD满足什么属性，能解决上述问题？</h2><ol><li>买票的过程得是原子的吧</li><li>买票互相应该不能影响吧</li><li>买完票应该要永久有效吧</li><li>买前，和买后都要是确定的状态吧</li></ol><blockquote><p>一堆相关操作的集合就是一个事务<br>一个事务可以包含很多条mysql语句<br>所有的sql操作，一般都会被mysql包装成为事务，以事务的方式提交的！</p></blockquote><blockquote><p>原子性：一个事务里面的多个语句，要么全部执行完成，要么不执行<br>如果只执行了其中一些，那么就会回滚到之前的状态<br>一致性：在事务开始之前和事务结束以后，数据库的完整性没有被破坏。<br>隔离性：数据库允许多个并发事务同时对其数据进行读写和修改的能力，隔离性可以防止多个事务并发执行时由于交叉执行而导致数据的不一致。事务隔离分为不同级别，包括读未提交（ Read uncommitted ）、读提交（ read committed ）、可重复读（ repeatable read ）和串行化（ Serializable ）<br>持久性： 事务处理结束后，对数据的修改就是永久的，即便系统故障也不会丢失。</p></blockquote><blockquote><p>为什么会出现事务<br>应用程序访问数据库时，不需要我们去考虑各种潜在错误和并发问题，</p></blockquote><h2 id="事务的版本支持"><a href="#事务的版本支持" class="headerlink" title="事务的版本支持"></a>事务的版本支持</h2><p>myisam 采用非聚簇索引，将索引结构和数据进行了分离<br>在 MySQL 中只有使用了 Innodb 数据库引擎的数据库或表才支持事务， MyISAM 不支持</p><p><img src="/../../../Note/images/image-20230226234216796.png" alt="image-20230226234216796"></p><h2 id="事务的提交方式"><a href="#事务的提交方式" class="headerlink" title="事务的提交方式"></a>事务的提交方式</h2><p>常见提交方式：<br>自动提交，手动提交</p><blockquote><p>查看事务提交方式</p><p><img src="/../../../Note/images/image-20230226234250095.png" alt="image-20230226234250095"></p></blockquote><blockquote><p>改变事务的提交方式</p><p><img src="/../../../Note/images/image-20230226234311379.png" alt="image-20230226234311379"></p></blockquote><h3 id="1-准备"><a href="#1-准备" class="headerlink" title="1. 准备"></a>1. 准备</h3><blockquote><p>将隔离级别设置为读未提交</p><p><img src="/../../../Note/images/image-20230226234419206.png" alt="image-20230226234419206"></p></blockquote><blockquote><p>创建测试表：</p><p><img src="/../../../Note/images/image-20230226234443234.png" alt="image-20230226234443234"></p></blockquote><h3 id="2-演示"><a href="#2-演示" class="headerlink" title="2. 演示"></a>2. 演示</h3><p>证明事务的开始与回滚</p><blockquote><p><strong>正常事务操作：</strong><br><strong>启动事务</strong>：start transaction; || begin<br><strong>设置回滚点</strong>：savepoint s1;<br><strong>回滚到回滚点</strong> ：rollback s1; || rollback to s1;<br><strong>回滚到起点</strong> ：rollback;<br><strong>事务结束</strong>： commit;</p></blockquote><blockquote><p><strong>非正常事务操作</strong></p><p><img src="/../../../Note/images/image-20230226234532081.png" alt="image-20230226234532081"></p><p>MySQL中事务是否自动提交无关</p></blockquote><blockquote><p>当事务commit之后，事务的操作就会永久有效，且不能回滚—-持久性</p></blockquote><h3 id="3-问题：自动提交"><a href="#3-问题：自动提交" class="headerlink" title="3. 问题：自动提交"></a>3. 问题：自动提交</h3><blockquote><p>关闭自动提交<br>异常终止MySQL<br>另一个页面查看数据</p><p><img src="/../../../Note/images/image-20230226234625227.png" alt="image-20230226234625227"></p><p>总结：<br>1.手动提交需要 commit<br>2.我们之前的所有单条sql，本质在mysql中，全部各自会被以事务的方式进行提交的！</p></blockquote><h3 id="4-结论与注意"><a href="#4-结论与注意" class="headerlink" title="4. 结论与注意"></a>4. 结论与注意</h3><p><strong>结论</strong>：<br>只要输入begin或者start transaction，事务便必须要通过commit提交，才会持久化，与是否设置setautocommit无关。<br>事务可以手动回滚，同时，当操作异常，MySQL会自动回滚<br>对于 InnoDB 每一条 SQL 语言都默认封装成事务，自动提交。（select有特殊情况，因为 MySQL 有MVCC ）</p><p><strong>事务操作注意事项</strong><br>如果没有设置保存点，也可以回滚，只能回滚到事务的开始。直接使用 rollback(前提是事务还没有提交)<br>如果一个事务被提交了（commit），则不可以回退（rollback）<br>可以选择回退到哪个保存点<br>InnoDB 支持事务， MyISAM 不支持事务<br>开始事务可以使 start transaction 或者 begin</p><h2 id="事务隔离级别"><a href="#事务隔离级别" class="headerlink" title="事务隔离级别"></a>事务隔离级别</h2><h3 id="1-简介"><a href="#1-简介" class="headerlink" title="1. 简介"></a>1. 简介</h3><p>数据库中，为了保证事务执行过程中尽量不受干扰，就有了一个重要特征：<strong>隔离性</strong><br>数据库中，允许事务受不同程度的干扰，就有了一种重要特征：<strong>隔离级别</strong></p><p><strong>隔离级别：</strong><br><strong>读未提交【Read Uncommitted】：</strong> 在该隔离级别，所有的事务都可以看到其他事务没有提交的执行结果。（实际生产中不可能使用这种隔离级别的），但是相当于没有任何隔离性，也会有很多并发问题，如脏读，幻读，不可重复读等，我们上面为了做实验方便，用的就是这个隔离性。<br>脏读：我没有提交，你却可以读取<br><strong>读提交【Read Committed】 ：</strong>该隔离级别是大多数数据库的默认的隔离级别（不是 MySQL 默认的）。它满足了隔离的简单定义:一个事务只能看到其他的已经提交的事务所做的改变。这种隔离级别会引起不可重复读，即一个事务执行时，如果多次 select， 可能得到不同的结果。<br><strong>可重复读【Repeatable Read】：</strong> 这是 MySQL 默认的隔离级别，它确保同一个事务，在执行中，多次读取操作数据时，会看到同样的数据行。但是会有幻读问题。<br><strong>串行化【Serializable】:</strong> 这是事务的最高隔离级别，它通过强制事务排序，使之不可能相互冲突，从而解决了幻读的问题。它在每个读的数据行上面加上共享锁，。但是可能会导致超时和锁竞争（这种隔离级别太极端，实际生产基本不使用）</p><p>隔离级别一般都是通过锁来实现的</p><blockquote><p><strong>查看隔离级别：</strong></p><p>![image-20230226234837903](data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 828 980"></svg>)</p></blockquote><blockquote><p><strong>设置隔离级别：</strong></p></blockquote><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SET [SESSION | GLOBAL] TRANSACTION ISOLATION LEVEL &#123;</span><br><span class="line">READ UNCOMMITTED | READ COMMITTED | REPEATABLE READ | SERIALIZABLE&#125;</span><br></pre></td></tr></table></figure><p>session:设置完成之后不需要重启，且session.tx_isolation 和 tx_isolation都是session设置的内容，且Linux的另一个窗口不会收到影响<br>global：设置完成之后，需要重启，且Linux的所有窗口下都会被设置未global设置的内容</p><h3 id="2-读未提交【Read-Uncommitted】"><a href="#2-读未提交【Read-Uncommitted】" class="headerlink" title="2. 读未提交【Read Uncommitted】"></a>2. 读未提交【Read Uncommitted】</h3><p>几乎没有加锁，虽然效率高，但是问题太多，严重不建议采用</p><p>一个事务在执行中，读到另一个执行中事务的更新(或其他操作)但是未commit的数据，这种现象叫做脏读(dirty read)</p><h3 id="3-读提交【Read-Committed】"><a href="#3-读提交【Read-Committed】" class="headerlink" title="3. 读提交【Read Committed】"></a>3. 读提交【Read Committed】</h3><p>一个事务只有被commit，才能被读取到</p><p>1.读提交<br>一旦提交，别人能读到 不应该等价于 你已经提交，和你“并行运行”的事务也能读到<br>2.不可重复读问题–&gt;应用层会有什么问题？<br>同一个事务，同样的读取，在不同的时间段，读取到了不同的值<br>原因：<br>两个终端，一个修改数据，一个查询数据，可能会因为时间的不同而访问到不同的数据</p><h3 id="4-可重复读【Repeatable-Read】"><a href="#4-可重复读【Repeatable-Read】" class="headerlink" title="4. 可重复读【Repeatable Read】"></a>4. 可重复读【Repeatable Read】</h3><p>为了解决不可重复读问题</p><p>两个终端分别启动事务<br>第一个终端修改数据，然后commit<br>另一个终端分别在第一个终端的commit前后，查询数据，发现数据还是那个数据，当这个终端commit后，才能查询到第一个终端修改之后的数据</p><h3 id="5-串行化【serializable】"><a href="#5-串行化【serializable】" class="headerlink" title="5. 串行化【serializable】"></a>5. 串行化【serializable】</h3><p>对所有操作全部加锁，进行串行化，不会有问题，但是只要串行化，效率很低，几乎完全不会被采用</p><p>两个事务进行串行化</p><p>实验:<br>两个事务依次进行begin<br>两个事务都可以进行查询数据select<br>当第一个事务进行修改数据的时候，是会直接卡住的，此时当第二个事务commit，第一个事务则才会进行修改数据<br>（当第一个事务卡住的时候，长时间不对第二个事务进行commit，然后第二个事务commit，此时第一个事务也是不能执行成功的—-超时机制）</p><h3 id="6-总结"><a href="#6-总结" class="headerlink" title="6. 总结"></a>6. 总结</h3><p>读未提交：<br>有脏读问题，幻读，不可重复读<br>读提交：<br>不可重读读，幻读<br>可重复读：<br>MySQL不存在任何问题，但是别人数据库可能存在幻读问题<br>幻读是专门针对插入的</p><p>隔离性：<br>MySQL的内部机制，让“同时”启动，并发执行的各个事务，看到不同的数据修改（增删改），就叫做隔离性<br>我们作为一个事务，可以看到不同可见性的数据，程度的不同，叫做隔离级别<br>为何要存在隔离级别？<br>为了安全与效率，结合实际情况</p><h3 id="7-一致性"><a href="#7-一致性" class="headerlink" title="7. 一致性"></a>7. 一致性</h3><p>事务执行的结果，必须使数据库从一个一致性状态，变到另一个一致性状态。当数据库只包含事务成功提交的结果时，数据库处于一致性状态。如果系统运行发生中断，某个事务尚未完成而被迫中断，而改未完成的事务对数据库所做的修改已被写入数据库，此时数据库就处于一种不正确（不一致）的状态。因此一致性是通过原子性来保证的。<br>其实一致性和用户的业务逻辑强相关，由用户和MySQL共同决定<br>而技术上，通过AID保证C</p><p>原子性，持久性，隔离性，他们三个都保证了一致性<br>事务的最终目标：一致性</p><h2 id="如何理解隔离性？"><a href="#如何理解隔离性？" class="headerlink" title="如何理解隔离性？"></a>如何理解隔离性？</h2><p>数据库并发场景：<br>读-读 ：不存在任何问题，也不需要并发控制<br>读-写 ：有线程安全问题，可能会造成事务隔离性问题，可能遇到脏读，幻读，不可重复读<br>写-写 ：有线程安全问题，可能会存在更新丢失问题<br>只能通过加锁解决，两个写都没问题，但是第一个完成写的终端，进行了数据回滚，那么就有可能数据丢失</p><h2 id="读写"><a href="#读写" class="headerlink" title="读写"></a>读写</h2><p>多版本并发控制（ MVCC ）是一种用来解决 读-写冲突 的无锁并发控制<br>为事务分配单向增长的事务ID，为每个修改保存一个版本，版本与事务ID关联，读操作只读该事务开始前的数据库的快照</p><p>为事务分配单向增长的事务ID：可以通过事务id数字，来区分事务的先后</p><h3 id="1-预备知识"><a href="#1-预备知识" class="headerlink" title="1. 预备知识"></a>1. 预备知识</h3><blockquote><p>3个记录隐藏列字段<br><strong>DB_TRX_ID ：</strong>6 byte，最近修改( 修改/插入 )事务ID，记录创建这条记录/最后一次修改该记录的事务ID（记录的这个事务id，修改了这列数据）<br><strong>DB_ROLL_PTR :</strong> 7 byte，回滚指针，指向这条记录的上一个版本（简单理解成，指向历史版本就行，这些数据一般在 undo log 中）<br><strong>DB_ROW_ID :</strong> 6 byte，隐含的自增ID（隐藏主键），如果数据表没有主键， InnoDB 会自动以 <strong>DB_ROW_ID</strong> 产生一个聚簇索引，（如果有那么就不需要增加）<br><strong>补充：</strong>实际还有一个删除flag隐藏字段, 既记录被更新或删除并不代表真的删除，而是删除flag变了</p></blockquote><blockquote><p>undo日志<br>MySQL 中的一段内存缓冲区，用来保存日志数据的就行</p></blockquote><blockquote><p>MVCC模拟</p><p>![image-20230226235254397](data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1830 922"></svg>)</p><p>一个基于链表记录的历史<strong>版本</strong>链。所谓的回滚，无非就是用历史数据，覆盖当前数据。</p></blockquote><p>上面的一个一个版本，我们可以称之为一个一个的快照（历史版本）<br>最新版本：当前值</p><h3 id="2-思考"><a href="#2-思考" class="headerlink" title="2. 思考"></a>2. 思考</h3><blockquote><p>上面是以更新（<code>upadte</code>）主讲的,如果是<code>delete</code>呢？一样的，别忘了，删数据不是清空，而是设置flag为删除即可。也可以形成版本。<br><strong>问题：</strong> delete也可以恢复数据，保证操作的原子性</p></blockquote><blockquote><p>如果是insert呢？因为insert是插入，也就是之前没有数据，那么insert也就没有历史版本。但是一般为了回滚操作，insert的数据也是要被放入undo log中，如果当前事务commit了，那么这个undo log 的历史insert记录就可以被清空了。<br>当我们第一次insert时，数据库本身没有这段数据，我们可以先插入一段空记录，如果需要回滚，可以查看历史undo日志，</p></blockquote><blockquote><p>select不会对数据做任何修改，所以，为select维护多版本，没有意义。不过，此时有个问题，就是：select读取，是读取最新的版本呢？还是读取历史版本？–&gt;都有可能<br>不同事务，观看到不同的版本<br>select看的是最古老的版本，修改则是最新的版本<br>隔离级别的不同，让你看到的是历史的不同版本<br>当前读：读取最新的记录，就是当前读。增删改，都叫做当前读，select也有可能当前读，比如：select lock in sharemode(共享锁), select for update （这个好理解，我们后面不讨论）<br>快照读：读取历史版本(一般而言)，就叫做快照读。</p></blockquote><blockquote><p>我们可以看到，在多个事务同时删改查的时候，都是当前读，是要加锁的。那同时有select过来，如果也要读取最新版(当前读)，那么也就需要加锁，这就是串行化。<br>但如果是快照读，读取历史版本的话，是不受加锁限制的。也就是可以并行执行！换言之，提高了效率，即MVCC的意义所在</p></blockquote><p>隔离级别决定了，select是当前读，还是快照!</p><p>为什么要有隔离级别呢？事务都是原子的。所以，无论如何，事务总有先有后。</p><p>但是经过上面的操作我们发现，事务从begin-&gt;CURD-&gt;commit，是有一个阶段的。也就是事务有执行前，执行中，执行后的阶段。但，不管怎么启动多个事务，总是有先有后的。</p><p>那么多个事务在执行中，CURD操作是会交织在一起的。那么，为了保证事务的“有先有后”，是不是应该让不同的事务看到它该看到的内容，这就是所谓的隔离性与隔离级别要解决的问题。</p><p>先来的事务，应不应该看到后来的事务所做的修改呢?</p><h3 id="3-read-view"><a href="#3-read-view" class="headerlink" title="3. read view"></a>3. read view</h3><p>Read View就是事务进行 快照读 操作的时候生产的 读视图 (Read View)，在该事务执行的快照读的那一刻，会生成数据库系统当前的一个快照，记录并维护系统当前活跃事务的ID(当每个事务开启时，都会被分配一个ID, 这个ID是递增的，所以最新的事务，ID值越大)</p><p>Read View 在 MySQL 源码中,就是一个类，本质是用来进行可见性判断的。 即当我们某个事务执行快照读的时候，对该记录创建一个 Read View 读视图，把它比作条件,用来判断当前事务能够看到哪个版本的数据，既可能是当前最新的数据，也有可能是该行记录的 undo log 里面的某个版本的数据。</p><p>当你.的事务到来的时候，形成事务id，你所能看到mysql 内部的各种数据，就要被确定下来！<br>当我们的事务到来的时候，我们能看到MySQL内部的各种数据，类比成一张照片</p><h2 id="RR和RC的本质区别"><a href="#RR和RC的本质区别" class="headerlink" title="RR和RC的本质区别"></a>RR和RC的本质区别</h2><p>事务中快照读的结果是非常依赖该事务首次出现快照读的地方，即某个事务中首次出现快照读，决定该事务后续快照读结果的能力<br>delete同样如此</p><p><strong>RR和RC的本质区别：</strong><br>正是Read View生成时机的不同，从而造成RC,RR级别下快照读的结果的不同<br>在RR级别下的某个事务的对某条记录的第一次快照读会创建一个快照及Read View, 将当前系统活跃的其他事务记录起来<br>此后在调用快照读的时候，还是使用的是同一个Read View，所以只要当前事务在其他事务提交更新之前使用过快照读，那么之后的快照读使用的都是同一个Read View，所以对之后的修改不可见；<br>即RR级别下，快照读生成Read View时，Read View会记录此时所有其他活动事务的快照，这些事务的修改对于当前事务都是不可见的。而早于Read View创建的事务所做的修改均是可见<br>而在<strong>RC级别下</strong>的，事务中，<strong>每次快照读都会新生成一个快照和Read View,</strong> 这就是我们在RC级别下的事务中可以看到别的事务提交的更新的原因<br>总之在RC隔离级别下，是每个快照读都会生成并获取最新的Read View；而在RR隔离级别下，则是同一个事务中的第一个快照读才会创建Read View, 之后的快照读获取的都是同一个Read View。<br>正是RC每次快照读，都会形成Read View，所以，RC才会有不可重复读问题。</p><p>事务的基本验证<br>事务如何操作<br>如何启动一个事务，如何提交一个事务<br>会操作</p><p>根据事务常见操作，引发的各种验证实验<br>回滚性质，安全性质，mysql各种隔离级别<br>设置隔离级别的各种表现<br>通过实现如何理解四个性质</p><p>从源码中理解隔离性</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 计算机技术 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 数据库 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>java同时访问一个meshod会起几个线程</title>
+      <link href="/2023/02/26/java%E5%90%8C%E6%97%B6%E8%AE%BF%E9%97%AE%E4%B8%80%E4%B8%AAmeshod%E4%BC%9A%E8%B5%B7%E5%87%A0%E4%B8%AA%E7%BA%BF%E7%A8%8B/"/>
+      <url>/2023/02/26/java%E5%90%8C%E6%97%B6%E8%AE%BF%E9%97%AE%E4%B8%80%E4%B8%AAmeshod%E4%BC%9A%E8%B5%B7%E5%87%A0%E4%B8%AA%E7%BA%BF%E7%A8%8B/</url>
+      
+        <content type="html"><![CDATA[<h1 id="java同时访问一个meshod会起几个线程"><a href="#java同时访问一个meshod会起几个线程" class="headerlink" title="java同时访问一个meshod会起几个线程"></a>java同时访问一个meshod会起几个线程</h1><p>首先看文章之前你可以在脑海中模拟一下，两个请求并发访问一个方法，从浏览器到后台的大致流程是怎么样的，模拟的越详细越好。</p><p>我相信很大一部分人可能都会被这个问题难住，不管是刚毕业的大学生，还是工作两三年的朋友们。</p><p>可能我们平时太多的关注业务逻辑，关注各种炫酷的框架，亦或者是公司太忙，忙到我们没时间成长等等等，从而忽略了这些最基础的东西。不过可能正是因为这些最基础的东西，才是我们为什么薪资比别人低了一点，为什么机会比别人少了一点，为什么差距和别人越来越大。</p><p>学而不思则罔，思而不学则殆。</p><p>这个问题其实分两步<br>第一步是用户点击页面，并发送请求到服务器的步骤，这个步骤很复杂，涉及到网络协议很多东西，我们暂且不讲。<br>第二步就是服务器收到请求，我们代码执行的过程，我们具体说一下这一步。<br>如下图这个简单的方法</p><p><img src="/../images/image-20230226233402320.png" alt="image-20230226233402320"></p><p>有两个请求并发访问，也就是说有两个线程同时准备进入方法printA()。那么问题来了</p><p>是线程1先进入方法执行完毕后再让线程2进入执行吗。</p><p>不是的，是两个线程同时去执行这一段代码</p><p>那有同学可能会问了，如果两个线程同时进入这个方法，</p><p>线程1执行到a = a + 10;此时a的值为11，</p><p>然后线程2进入方法执行int a = 1; 那线程1打印出来a是不是就变成1了。</p><p>不是的，线程1打印a还是为11，为什么呢，因为a是定义在方法里面的，是局部变量。</p><p>然后每个线程是不是都有一个私有的本地内存（Local Memory），这个私有本地内存是不是存放这个局部变量的，答案是肯定的，既然赋值操作都是在我自己的地盘弄的，那肯定不会影响到别人。</p><p>但是如果我在这个类中加入一个全局变量，如下图</p><p><img src="/../images/image-20230226233421609.png" alt="image-20230226233421609"></p><p>两个线程同时进入这个方法，那输出的c肯定是不一样的，为什么呢，相信你已经猜到了，没错。</p><p>这是因为线程之间的共享变量存储在主内存（Main Memory）中，变量c是全局变量，会放在主存中。</p><p>类初始化的时候全局变量会被加载到主存中，线程1需要对c赋值计算的时候，从主存中拷贝一个c的副本，放到自己的私有内存中，计算完毕后c的值发生了变化，回写到主存中，这时候线程2需要对c赋值计算了，再把c拷贝一个副本到自己的私有内存里，计算完毕后，再回写到主存中，最后的结果就是对c进行了两次操作。其实这个过程就是线程之间的通讯过程</p><p>如下草图</p><p><img src="/../images/image-20230226233437115.png" alt="image-20230226233437115"></p><p>好了，差不多到这里这个简易的流程就算是结束了。涉及到了几个知识点，线程内存模型，全局变量和成员变量的区别。<br>写这篇文章的目的是想帮助对这一块概念比较模糊的同学，大家都知道线程的定义，变量的定义，但是结合在一起可能会迷糊一点，这里借一个简单的小例子可以帮大家把学到的东西串起来。<br>知其然，知其所以然，才可以更好的敲代码。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 计算机技术 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> java </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Go语言的类_结构体和方法</title>
       <link href="/2023/02/26/Go%E8%AF%AD%E8%A8%80%E7%9A%84%E7%B1%BB-%E7%BB%93%E6%9E%84%E4%BD%93%E5%92%8C%E6%96%B9%E6%B3%95/"/>
       <url>/2023/02/26/Go%E8%AF%AD%E8%A8%80%E7%9A%84%E7%B1%BB-%E7%BB%93%E6%9E%84%E4%BD%93%E5%92%8C%E6%96%B9%E6%B3%95/</url>
@@ -202,6 +252,17 @@
     
     <entry>
       <title></title>
+      <link href="/css/custom.css"/>
+      <url>/css/custom.css</url>
+      
+        <content type="html"><![CDATA[/* 页脚与头图透明 */#footer {  background: transparent !important;}#page-header {  background: transparent !important;}/* 白天模式遮罩透明 */#footer::before {  background: transparent !important;}#page-header::before {  background: transparent !important;}/* 夜间模式遮罩透明 */[data-theme="dark"] #footer::before {  background: transparent !important;}[data-theme="dark"] #page-header::before {  background: transparent !important;}/* 翻页按钮居中 */#pagination {  width: 100%;  margin: auto;}/* 一级菜单居中 */#nav .menus_items {  position: absolute !important;  width: fit-content !important;  left: 50% !important;  transform: translateX(-50%) !important;}/* 子菜单横向展示 */#nav .menus_items .menus_item:hover .menus_item_child {  display: flex !important;}/* 这里的2是代表导航栏的第2个元素，即有子菜单的元素，可以按自己需求修改 */.menus_items .menus_item:nth-child(2) .menus_item_child {  left: -125px;}/* 夜间模式菜单栏发光字 */[data-theme="dark"] #nav .site-page,[data-theme="dark"] #nav .menus_items .menus_item .menus_item_child li a {  text-shadow: 0 0 2px var(--theme-color) !important;}/* 手机端适配 */[data-theme="dark"] #sidebar #sidebar-menus .menus_items .site-page {  text-shadow: 0 0 2px var(--theme-color) !important;}/* 侧边栏个人信息卡片动态渐变色 */#aside-content > .card-widget.card-info {  background: linear-gradient(    -45deg,    #e8d8b9,    #eccec5,    #a3e9eb,    #bdbdf0,    #eec1ea  );  box-shadow: 0 0 5px rgb(66, 68, 68);  position: relative;  background-size: 400% 400%;  -webkit-animation: Gradient 10s ease infinite;  -moz-animation: Gradient 10s ease infinite;  animation: Gradient 10s ease infinite !important;}@-webkit-keyframes Gradient {  0% {    background-position: 0% 50%;  }  50% {    background-position: 100% 50%;  }  100% {    background-position: 0% 50%;  }}@-moz-keyframes Gradient {  0% {    background-position: 0% 50%;  }  50% {    background-position: 100% 50%;  }  100% {    background-position: 0% 50%;  }}@keyframes Gradient {  0% {    background-position: 0% 50%;  }  50% {    background-position: 100% 50%;  }  100% {    background-position: 0% 50%;  }}/* 黑夜模式适配 */[data-theme="dark"] #aside-content > .card-widget.card-info {  background: #191919ee;}/* 个人信息Follow me按钮 */#aside-content > .card-widget.card-info > #card-info-btn {  background-color: #3eb8be;  border-radius: 8px;}]]></content>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title></title>
       <link href="/css/universe.css"/>
       <url>/css/universe.css</url>
       
@@ -215,6 +276,39 @@
       <title>about</title>
       <link href="/about/index.html"/>
       <url>/about/index.html</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title></title>
+      <link href="/js/light.js"/>
+      <url>/js/light.js</url>
+      
+        <content type="html"><![CDATA[// 霓虹灯效果// 颜色数组var arr = ["#39c5bb", "#f14747", "#f1a247", "#f1ee47", "#b347f1", "#1edbff", "#ed709b", "#5636ed"];// 颜色索引var idx = 0;// 切换颜色function changeColor() {    // 仅夜间模式才启用        if (document.getElementsByTagName('html')[0].getAttribute('data-theme') == 'dark') {        if (document.getElementById("site-name"))            document.getElementById("site-name").style.textShadow = arr[idx] + " 0 0 15px";            if (document.getElementById("site-title"))                document.getElementById("site-title").style.textShadow = arr[idx] + " 0 0 15px";        if (document.getElementById("site-subtitle"))            document.getElementById("site-subtitle").style.textShadow = arr[idx] + " 0 0 10px";            if (document.getElementById("post-info"))                document.getElementById("post-info").style.textShadow = arr[idx] + " 0 0 5px";        try {            document.getElementsByClassName("author-info__name")[0].style.textShadow = arr[idx] + " 0 0 12px";                document.getElementsByClassName("author-info__description")[0].style.textShadow = arr[idx] + " 0 0 12px";        } catch {            }            idx++;            if (idx == 8) {                idx = 0;        }    } else {            // 白天模式恢复默认            if (document.getElementById("site-name"))                document.getElementById("site-name").style.textShadow = "#1e1e1ee0 1px 1px 1px";        if (document.getElementById("site-title"))            document.getElementById("site-title").style.textShadow = "#1e1e1ee0 1px 1px 1px";            if (document.getElementById("site-subtitle"))                document.getElementById("site-subtitle").style.textShadow = "#1e1e1ee0 1px 1px 1px";        if (document.getElementById("post-info"))            document.getElementById("post-info").style.textShadow = "#1e1e1ee0 1px 1px 1px";            try {                document.getElementsByClassName("author-info__name")[0].style.textShadow = "";            document.getElementsByClassName("author-info__description")[0].style.textShadow = "";            } catch {        }    }    }    // 开启计时器    window.onload = setInterval(changeColor, 1200);]]></content>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Gallery</title>
+      <link href="/Gallery/index.html"/>
+      <url>/Gallery/index.html</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>movies</title>
+      <link href="/movies/index.html"/>
+      <url>/movies/index.html</url>
       
         <content type="html"><![CDATA[]]></content>
       
@@ -245,20 +339,9 @@
     
     
     <entry>
-      <title>movies</title>
-      <link href="/movies/index.html"/>
-      <url>/movies/index.html</url>
-      
-        <content type="html"><![CDATA[]]></content>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>Gallery</title>
-      <link href="/Gallery/index.html"/>
-      <url>/Gallery/index.html</url>
+      <title>音乐</title>
+      <link href="/music/index.html"/>
+      <url>/music/index.html</url>
       
         <content type="html"><![CDATA[]]></content>
       
@@ -279,43 +362,10 @@
     
     <entry>
       <title></title>
-      <link href="/css/custom.css"/>
-      <url>/css/custom.css</url>
-      
-        <content type="html"><![CDATA[/* 页脚与头图透明 */#footer {  background: transparent !important;}#page-header {  background: transparent !important;}/* 白天模式遮罩透明 */#footer::before {  background: transparent !important;}#page-header::before {  background: transparent !important;}/* 夜间模式遮罩透明 */[data-theme="dark"] #footer::before {  background: transparent !important;}[data-theme="dark"] #page-header::before {  background: transparent !important;}/* 翻页按钮居中 */#pagination {  width: 100%;  margin: auto;}/* 一级菜单居中 */#nav .menus_items {  position: absolute !important;  width: fit-content !important;  left: 50% !important;  transform: translateX(-50%) !important;}/* 子菜单横向展示 */#nav .menus_items .menus_item:hover .menus_item_child {  display: flex !important;}/* 这里的2是代表导航栏的第2个元素，即有子菜单的元素，可以按自己需求修改 */.menus_items .menus_item:nth-child(2) .menus_item_child {  left: -125px;}/* 夜间模式菜单栏发光字 */[data-theme="dark"] #nav .site-page,[data-theme="dark"] #nav .menus_items .menus_item .menus_item_child li a {  text-shadow: 0 0 2px var(--theme-color) !important;}/* 手机端适配 */[data-theme="dark"] #sidebar #sidebar-menus .menus_items .site-page {  text-shadow: 0 0 2px var(--theme-color) !important;}/* 侧边栏个人信息卡片动态渐变色 */#aside-content > .card-widget.card-info {  background: linear-gradient(    -45deg,    #e8d8b9,    #eccec5,    #a3e9eb,    #bdbdf0,    #eec1ea  );  box-shadow: 0 0 5px rgb(66, 68, 68);  position: relative;  background-size: 400% 400%;  -webkit-animation: Gradient 10s ease infinite;  -moz-animation: Gradient 10s ease infinite;  animation: Gradient 10s ease infinite !important;}@-webkit-keyframes Gradient {  0% {    background-position: 0% 50%;  }  50% {    background-position: 100% 50%;  }  100% {    background-position: 0% 50%;  }}@-moz-keyframes Gradient {  0% {    background-position: 0% 50%;  }  50% {    background-position: 100% 50%;  }  100% {    background-position: 0% 50%;  }}@keyframes Gradient {  0% {    background-position: 0% 50%;  }  50% {    background-position: 100% 50%;  }  100% {    background-position: 0% 50%;  }}/* 黑夜模式适配 */[data-theme="dark"] #aside-content > .card-widget.card-info {  background: #191919ee;}/* 个人信息Follow me按钮 */#aside-content > .card-widget.card-info > #card-info-btn {  background-color: #3eb8be;  border-radius: 8px;}]]></content>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title></title>
-      <link href="/js/light.js"/>
-      <url>/js/light.js</url>
-      
-        <content type="html"><![CDATA[// 霓虹灯效果// 颜色数组var arr = ["#39c5bb", "#f14747", "#f1a247", "#f1ee47", "#b347f1", "#1edbff", "#ed709b", "#5636ed"];// 颜色索引var idx = 0;// 切换颜色function changeColor() {    // 仅夜间模式才启用        if (document.getElementsByTagName('html')[0].getAttribute('data-theme') == 'dark') {        if (document.getElementById("site-name"))            document.getElementById("site-name").style.textShadow = arr[idx] + " 0 0 15px";            if (document.getElementById("site-title"))                document.getElementById("site-title").style.textShadow = arr[idx] + " 0 0 15px";        if (document.getElementById("site-subtitle"))            document.getElementById("site-subtitle").style.textShadow = arr[idx] + " 0 0 10px";            if (document.getElementById("post-info"))                document.getElementById("post-info").style.textShadow = arr[idx] + " 0 0 5px";        try {            document.getElementsByClassName("author-info__name")[0].style.textShadow = arr[idx] + " 0 0 12px";                document.getElementsByClassName("author-info__description")[0].style.textShadow = arr[idx] + " 0 0 12px";        } catch {            }            idx++;            if (idx == 8) {                idx = 0;        }    } else {            // 白天模式恢复默认            if (document.getElementById("site-name"))                document.getElementById("site-name").style.textShadow = "#1e1e1ee0 1px 1px 1px";        if (document.getElementById("site-title"))            document.getElementById("site-title").style.textShadow = "#1e1e1ee0 1px 1px 1px";            if (document.getElementById("site-subtitle"))                document.getElementById("site-subtitle").style.textShadow = "#1e1e1ee0 1px 1px 1px";        if (document.getElementById("post-info"))            document.getElementById("post-info").style.textShadow = "#1e1e1ee0 1px 1px 1px";            try {                document.getElementsByClassName("author-info__name")[0].style.textShadow = "";            document.getElementsByClassName("author-info__description")[0].style.textShadow = "";            } catch {        }    }    }    // 开启计时器    window.onload = setInterval(changeColor, 1200);]]></content>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title></title>
       <link href="/js/universe.js"/>
       <url>/js/universe.js</url>
       
         <content type="html"><![CDATA[function dark() {window.requestAnimationFrame=window.requestAnimationFrame||window.mozRequestAnimationFrame||window.webkitRequestAnimationFrame||window.msRequestAnimationFrame;var n,e,i,h,t=.05,s=document.getElementById("universe"),o=!0,a="180,184,240",r="226,225,142",d="226,225,224",c=[];function f(){n=window.innerWidth,e=window.innerHeight,i=.216*n,s.setAttribute("width",n),s.setAttribute("height",e)}function u(){h.clearRect(0,0,n,e);for(var t=c.length,i=0;i<t;i++){var s=c[i];s.move(),s.fadeIn(),s.fadeOut(),s.draw()}}function y(){this.reset=function(){this.giant=m(3),this.comet=!this.giant&&!o&&m(10),this.x=l(0,n-10),this.y=l(0,e),this.r=l(1.1,2.6),this.dx=l(t,6*t)+(this.comet+1-1)*t*l(50,120)+2*t,this.dy=-l(t,6*t)-(this.comet+1-1)*t*l(50,120),this.fadingOut=null,this.fadingIn=!0,this.opacity=0,this.opacityTresh=l(.2,1-.4*(this.comet+1-1)),this.do=l(5e-4,.002)+.001*(this.comet+1-1)},this.fadeIn=function(){this.fadingIn&&(this.fadingIn=!(this.opacity>this.opacityTresh),this.opacity+=this.do)},this.fadeOut=function(){this.fadingOut&&(this.fadingOut=!(this.opacity<0),this.opacity-=this.do/2,(this.x>n||this.y<0)&&(this.fadingOut=!1,this.reset()))},this.draw=function(){if(h.beginPath(),this.giant)h.fillStyle="rgba("+a+","+this.opacity+")",h.arc(this.x,this.y,2,0,2*Math.PI,!1);else if(this.comet){h.fillStyle="rgba("+d+","+this.opacity+")",h.arc(this.x,this.y,1.5,0,2*Math.PI,!1);for(var t=0;t<30;t++)h.fillStyle="rgba("+d+","+(this.opacity-this.opacity/20*t)+")",h.rect(this.x-this.dx/4*t,this.y-this.dy/4*t-2,2,2),h.fill()}else h.fillStyle="rgba("+r+","+this.opacity+")",h.rect(this.x,this.y,this.r,this.r);h.closePath(),h.fill()},this.move=function(){this.x+=this.dx,this.y+=this.dy,!1===this.fadingOut&&this.reset(),(this.x>n-n/4||this.y<0)&&(this.fadingOut=!0)},setTimeout(function(){o=!1},50)}function m(t){return Math.floor(1e3*Math.random())+1<10*t}function l(t,i){return Math.random()*(i-t)+t}f(),window.addEventListener("resize",f,!1),function(){h=s.getContext("2d");for(var t=0;t<i;t++)c[t]=new y,c[t].reset();u()}(),function t(){document.getElementsByTagName('html')[0].getAttribute('data-theme')=='dark'&&u(),window.requestAnimationFrame(t)}()};dark()]]></content>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>音乐</title>
-      <link href="/music/index.html"/>
-      <url>/music/index.html</url>
-      
-        <content type="html"><![CDATA[]]></content>
       
     </entry>
     
