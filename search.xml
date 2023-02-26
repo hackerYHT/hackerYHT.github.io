@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>Go语言的类_结构体和方法</title>
+      <link href="/2023/02/26/Go%E8%AF%AD%E8%A8%80%E7%9A%84%E7%B1%BB-%E7%BB%93%E6%9E%84%E4%BD%93%E5%92%8C%E6%96%B9%E6%B3%95/"/>
+      <url>/2023/02/26/Go%E8%AF%AD%E8%A8%80%E7%9A%84%E7%B1%BB-%E7%BB%93%E6%9E%84%E4%BD%93%E5%92%8C%E6%96%B9%E6%B3%95/</url>
+      
+        <content type="html"><![CDATA[<h1 id="Go语言的类-结构体和方法"><a href="#Go语言的类-结构体和方法" class="headerlink" title="Go语言的类_结构体和方法"></a>Go语言的类_结构体和方法</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>GO语言中没有类的概念，也不支持类的继承等面向对象的概念。GO语言中通过结构体的内嵌再配合接口比面向对象具有更高的扩展性和灵活性。</p><h2 id="一、结构体的基础知识"><a href="#一、结构体的基础知识" class="headerlink" title="一、结构体的基础知识"></a>一、结构体的基础知识</h2><h3 id="1-结构体的定义"><a href="#1-结构体的定义" class="headerlink" title="1. 结构体的定义"></a>1. 结构体的定义</h3><p>GO语言中的基础数据类型可以表示一些事物的基本属性，但是当我们想表达一个事物的部分或者全部属性时，单一的基本数据类型明显就不满足需求了。GO语言中提供了一种自定义的数据类型，可以封装多个基本数据类型，这种数据类型就是结构体（struct）。</p><p>GO语言中通过type和struct关键字来定义结构体，例：</p><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> person <span class="keyword">struct</span>&#123;</span><br><span class="line">name<span class="type">string</span></span><br><span class="line">age<span class="type">int</span></span><br><span class="line">sex<span class="type">string</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h3 id="2-结构体实例化"><a href="#2-结构体实例化" class="headerlink" title="2. 结构体实例化"></a>2. 结构体实例化</h3><p>GO语言中只有当结构体实例化时才会分配内存，因此必须实例化后才能使用结构体字段。例：</p><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//var 结构体实例 结构体类型</span></span><br><span class="line"><span class="keyword">type</span> person <span class="keyword">struct</span>&#123;</span><br><span class="line">name<span class="type">string</span></span><br><span class="line">age<span class="type">int</span></span><br><span class="line">sex<span class="type">string</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span> <span class="params">()</span></span>&#123;</span><br><span class="line"><span class="comment">//第一种</span></span><br><span class="line"><span class="keyword">var</span> p person </span><br><span class="line">p.name = <span class="string">&quot;GOgo&quot;</span></span><br><span class="line">p.age  = <span class="number">20</span></span><br><span class="line">p.sex  = <span class="string">&quot;男&quot;</span></span><br><span class="line"><span class="comment">//第二种</span></span><br><span class="line">p1 := person&#123;</span><br><span class="line">name : <span class="string">&quot;GOgo&quot;</span>,</span><br><span class="line">age  : <span class="number">20</span>,</span><br><span class="line">sex  : <span class="string">&quot;男&quot;</span>,</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure><h3 id="3-构造函数"><a href="#3-构造函数" class="headerlink" title="3. 构造函数"></a>3. 构造函数</h3><p>GO语言种没有结构体的构造函数，但是我们可以自己实现构造函数，以上文的<code>person</code>为例：</p><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">newPerson</span><span class="params">(name <span class="type">string</span> , age <span class="type">int</span>, sex <span class="type">string</span>)</span></span>*person&#123;</span><br><span class="line"><span class="keyword">return</span> &amp;person&#123;</span><br><span class="line">name : name,</span><br><span class="line">age  : age,</span><br><span class="line">sex  : sex,</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure><p>调用构造函数：</p><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">p := newPerson(<span class="string">&quot;GOgo&quot;</span>,<span class="number">20</span>,<span class="string">&quot;男&quot;</span>)</span><br></pre></td></tr></table></figure><h2 id="二、方法和接收者"><a href="#二、方法和接收者" class="headerlink" title="二、方法和接收者"></a>二、方法和接收者</h2><h3 id="1-方法定义"><a href="#1-方法定义" class="headerlink" title="1.方法定义"></a>1.方法定义</h3><p>GO语言中的方法（Method）是一种作用于特殊变量类型的函数，这种特定类型变量称为接收者（Receiver）。接收者的概念类似于其他语言的<code>this</code>和<code>self</code></p><h3 id="2-读入数据"><a href="#2-读入数据" class="headerlink" title="2.读入数据"></a>2.读入数据</h3><p>代码如下（示例）：</p><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">data = pd.read_csv(</span><br><span class="line">    <span class="string">&#x27;https://labfile.oss.aliyuncs.com/courses/1283/adult.data.csv&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(data.head())</span><br><span class="line"></span><br></pre></td></tr></table></figure><p>方法的定义格式如下：</p><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(接收者变量 接收者类型)</span></span> 方法名(参数列表)(返回参数)&#123;</span><br><span class="line">函数体</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p><strong>注意：</strong></p><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1.</span>接收者变量：接收者中的参数变量名在命名时，官方建议使用接收者类型名的第一个小写字母，而不是self、this之类的命名。例如，Person类型的接收者变量应该命名为 p，Connector类型的接收者变量应该命名为c等。</span><br><span class="line"><span class="number">2.</span>接收者类型：接收者类型和参数类似，可以是指针类型和非指针类型。</span><br><span class="line"><span class="number">3.</span>方法名、参数列表、返回参数：具体格式与函数定义相同。</span><br></pre></td></tr></table></figure><p>举个例子：</p><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> person <span class="keyword">struct</span>&#123;</span><br><span class="line">name <span class="type">string</span></span><br><span class="line">sex  <span class="type">string</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">newPerson</span><span class="params">(name , sex <span class="type">string</span>)</span></span> *person&#123;</span><br><span class="line"><span class="keyword">return</span> &amp;person&#123;</span><br><span class="line">name : name,</span><br><span class="line">sex  : sex,</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(p person)</span></span> Speake()&#123;</span><br><span class="line">fmt.Printf(<span class="string">&quot;%s说他一定要学好GO语言!&quot;</span>,p.name)</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    p := newPerson(<span class="string">&quot;GOgo&quot;</span>, <span class="number">20</span>)</span><br><span class="line">    p1.Speake()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h3 id="3-任意类型添加方法"><a href="#3-任意类型添加方法" class="headerlink" title="3.任意类型添加方法"></a>3.任意类型添加方法</h3><p>在Go语言中，接收者的类型可以是任何类型，不仅仅是结构体，任何类型都可以拥有方法。 举个例子，我们基于内置的int类型使用type关键字可以定义新的自定义类型，然后为我们的自定义类型添加方法。</p><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//MyInt 将int定义为自定义MyInt类型</span></span><br><span class="line"><span class="keyword">type</span> MyInt <span class="type">int</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//SayHello 为MyInt添加一个SayHello的方法</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(m MyInt)</span></span> SayHello() &#123;</span><br><span class="line">    fmt.Println(<span class="string">&quot;Hello, 我是一个int。&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> m1 MyInt</span><br><span class="line">    m1.SayHello() <span class="comment">//Hello, 我是一个int。</span></span><br><span class="line">    m1 = <span class="number">100</span></span><br><span class="line">    fmt.Printf(<span class="string">&quot;%#v  %T\n&quot;</span>, m1, m1) <span class="comment">//100  main.MyInt</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h3 id="4-嵌套结构体"><a href="#4-嵌套结构体" class="headerlink" title="4.嵌套结构体"></a>4.嵌套结构体</h3><p>一个结构体中可以嵌套包含另一个结构体或<a href="https://so.csdn.net/so/search?q=%E7%BB%93%E6%9E%84%E4%BD%93%E6%8C%87%E9%92%88&spm=1001.2101.3001.7020">结构体指针</a>。</p><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Address 地址结构体</span></span><br><span class="line"><span class="keyword">type</span> Address <span class="keyword">struct</span> &#123;</span><br><span class="line">    Province <span class="type">string</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//Person 结构体</span></span><br><span class="line"><span class="keyword">type</span> Person <span class="keyword">struct</span> &#123;</span><br><span class="line">    Name    <span class="type">string</span></span><br><span class="line">    Sex     <span class="type">string</span></span><br><span class="line">    Address Address</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    p1 := Person&#123;</span><br><span class="line">        Name :   <span class="string">&quot;GOgo&quot;</span>,</span><br><span class="line">        Sex  : <span class="string">&quot;男&quot;</span>,</span><br><span class="line">        Address: Address&#123;</span><br><span class="line">            Province: <span class="string">&quot;河南&quot;</span>,</span><br><span class="line">        &#125;,    <span class="comment">//注意这加 ，</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure><h3 id="5-嵌套结构体的字段冲突"><a href="#5-嵌套结构体的字段冲突" class="headerlink" title="5.嵌套结构体的字段冲突"></a>5.嵌套结构体的字段冲突</h3><p>嵌套结构体内部可能存在相同的字段名。这个时候为了避免歧义需要指定具体的内嵌结构体的字段。</p><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Address 地址结构体</span></span><br><span class="line"><span class="keyword">type</span> Address <span class="keyword">struct</span> &#123;</span><br><span class="line">    Province   <span class="type">string</span></span><br><span class="line">    City       <span class="type">string</span></span><br><span class="line">    CreateTime <span class="type">string</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//Email 邮箱结构体</span></span><br><span class="line"><span class="keyword">type</span> Email <span class="keyword">struct</span> &#123;</span><br><span class="line">    Account    <span class="type">string</span></span><br><span class="line">    CreateTime <span class="type">string</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//User 用户结构体</span></span><br><span class="line"><span class="keyword">type</span> User <span class="keyword">struct</span> &#123;</span><br><span class="line">    Name   <span class="type">string</span></span><br><span class="line">    Gender <span class="type">string</span></span><br><span class="line">    Address</span><br><span class="line">    Email</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> user3 User</span><br><span class="line">    user3.Name = <span class="string">&quot;pprof&quot;</span></span><br><span class="line">    user3.Gender = <span class="string">&quot;女&quot;</span></span><br><span class="line">    <span class="comment">// user3.CreateTime = &quot;2019&quot; //ambiguous selector user3.CreateTime</span></span><br><span class="line">    user3.Address.CreateTime = <span class="string">&quot;2000&quot;</span> <span class="comment">//指定Address结构体中的CreateTime</span></span><br><span class="line">    user3.Email.CreateTime = <span class="string">&quot;2000&quot;</span>   <span class="comment">//指定Email结构体中的CreateTime</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h3 id="6-结构体的“继承”"><a href="#6-结构体的“继承”" class="headerlink" title="6.结构体的“继承”"></a>6.结构体的“继承”</h3><p>Go语言中使用结构体也可以实现其他编程语言中面向对象的继承。</p><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Animal 动物</span></span><br><span class="line"><span class="keyword">type</span> Animal <span class="keyword">struct</span> &#123;</span><br><span class="line">    name <span class="type">string</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(a *Animal)</span></span> move() &#123;</span><br><span class="line">    fmt.Printf(<span class="string">&quot;%s会动！\n&quot;</span>, a.name)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//Dog 狗</span></span><br><span class="line"><span class="keyword">type</span> Dog <span class="keyword">struct</span> &#123;</span><br><span class="line">    Feet    <span class="type">int8</span></span><br><span class="line">    *Animal <span class="comment">//通过嵌套匿名结构体实现继承</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(d *Dog)</span></span> wang() &#123;</span><br><span class="line">    fmt.Printf(<span class="string">&quot;%s会汪汪汪~\n&quot;</span>, d.name)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    d1 := &amp;Dog&#123;</span><br><span class="line">        Feet: <span class="number">4</span>,</span><br><span class="line">        Animal: &amp;Animal&#123; <span class="comment">//注意嵌套的是结构体指针</span></span><br><span class="line">            name: <span class="string">&quot;乐乐&quot;</span>,</span><br><span class="line">        &#125;,</span><br><span class="line">    &#125;</span><br><span class="line">    d1.wang() <span class="comment">//乐乐会汪汪汪~</span></span><br><span class="line">    d1.move() <span class="comment">//乐乐会动！</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+      
+      
+      <categories>
+          
+          <category> 计算机技术 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> GoLand </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>nginx详解.md</title>
       <link href="/2023/02/06/nginx%E8%AF%A6%E8%A7%A3-md/"/>
       <url>/2023/02/06/nginx%E8%AF%A6%E8%A7%A3-md/</url>
@@ -176,50 +201,6 @@
     
     
     <entry>
-      <title>about</title>
-      <link href="/about/index.html"/>
-      <url>/about/index.html</url>
-      
-        <content type="html"><![CDATA[]]></content>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title></title>
-      <link href="/css/custom.css"/>
-      <url>/css/custom.css</url>
-      
-        <content type="html"><![CDATA[/* 页脚与头图透明 */#footer {  background: transparent !important;}#page-header {  background: transparent !important;}/* 白天模式遮罩透明 */#footer::before {  background: transparent !important;}#page-header::before {  background: transparent !important;}/* 夜间模式遮罩透明 */[data-theme="dark"] #footer::before {  background: transparent !important;}[data-theme="dark"] #page-header::before {  background: transparent !important;}/* 翻页按钮居中 */#pagination {  width: 100%;  margin: auto;}/* 一级菜单居中 */#nav .menus_items {  position: absolute !important;  width: fit-content !important;  left: 50% !important;  transform: translateX(-50%) !important;}/* 子菜单横向展示 */#nav .menus_items .menus_item:hover .menus_item_child {  display: flex !important;}/* 这里的2是代表导航栏的第2个元素，即有子菜单的元素，可以按自己需求修改 */.menus_items .menus_item:nth-child(2) .menus_item_child {  left: -125px;}/* 夜间模式菜单栏发光字 */[data-theme="dark"] #nav .site-page,[data-theme="dark"] #nav .menus_items .menus_item .menus_item_child li a {  text-shadow: 0 0 2px var(--theme-color) !important;}/* 手机端适配 */[data-theme="dark"] #sidebar #sidebar-menus .menus_items .site-page {  text-shadow: 0 0 2px var(--theme-color) !important;}/* 侧边栏个人信息卡片动态渐变色 */#aside-content > .card-widget.card-info {  background: linear-gradient(    -45deg,    #e8d8b9,    #eccec5,    #a3e9eb,    #bdbdf0,    #eec1ea  );  box-shadow: 0 0 5px rgb(66, 68, 68);  position: relative;  background-size: 400% 400%;  -webkit-animation: Gradient 10s ease infinite;  -moz-animation: Gradient 10s ease infinite;  animation: Gradient 10s ease infinite !important;}@-webkit-keyframes Gradient {  0% {    background-position: 0% 50%;  }  50% {    background-position: 100% 50%;  }  100% {    background-position: 0% 50%;  }}@-moz-keyframes Gradient {  0% {    background-position: 0% 50%;  }  50% {    background-position: 100% 50%;  }  100% {    background-position: 0% 50%;  }}@keyframes Gradient {  0% {    background-position: 0% 50%;  }  50% {    background-position: 100% 50%;  }  100% {    background-position: 0% 50%;  }}/* 黑夜模式适配 */[data-theme="dark"] #aside-content > .card-widget.card-info {  background: #191919ee;}/* 个人信息Follow me按钮 */#aside-content > .card-widget.card-info > #card-info-btn {  background-color: #3eb8be;  border-radius: 8px;}]]></content>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title></title>
-      <link href="/css/universe.css"/>
-      <url>/css/universe.css</url>
-      
-        <content type="html"><![CDATA[/* 背景宇宙星光  */#universe{  display: block;  position: fixed;  margin: 0;  padding: 0;  border: 0;  outline: 0;  left: 0;  top: 0;  width: 100%;  height: 100%;  pointer-events: none;  /* 这个是调置顶的优先级的，-1在文章页下面，背景上面，个人推荐这种 */  z-index: -1;}]]></content>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>categories</title>
-      <link href="/categories/index.html"/>
-      <url>/categories/index.html</url>
-      
-        <content type="html"><![CDATA[]]></content>
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title></title>
       <link href="/js/light.js"/>
       <url>/js/light.js</url>
@@ -242,11 +223,77 @@
     
     
     <entry>
+      <title>Gallery</title>
+      <link href="/Gallery/index.html"/>
+      <url>/Gallery/index.html</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>link</title>
       <link href="/link/index.html"/>
       <url>/link/index.html</url>
       
         <content type="html"><![CDATA[]]></content>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title></title>
+      <link href="/css/custom.css"/>
+      <url>/css/custom.css</url>
+      
+        <content type="html"><![CDATA[/* 页脚与头图透明 */#footer {  background: transparent !important;}#page-header {  background: transparent !important;}/* 白天模式遮罩透明 */#footer::before {  background: transparent !important;}#page-header::before {  background: transparent !important;}/* 夜间模式遮罩透明 */[data-theme="dark"] #footer::before {  background: transparent !important;}[data-theme="dark"] #page-header::before {  background: transparent !important;}/* 翻页按钮居中 */#pagination {  width: 100%;  margin: auto;}/* 一级菜单居中 */#nav .menus_items {  position: absolute !important;  width: fit-content !important;  left: 50% !important;  transform: translateX(-50%) !important;}/* 子菜单横向展示 */#nav .menus_items .menus_item:hover .menus_item_child {  display: flex !important;}/* 这里的2是代表导航栏的第2个元素，即有子菜单的元素，可以按自己需求修改 */.menus_items .menus_item:nth-child(2) .menus_item_child {  left: -125px;}/* 夜间模式菜单栏发光字 */[data-theme="dark"] #nav .site-page,[data-theme="dark"] #nav .menus_items .menus_item .menus_item_child li a {  text-shadow: 0 0 2px var(--theme-color) !important;}/* 手机端适配 */[data-theme="dark"] #sidebar #sidebar-menus .menus_items .site-page {  text-shadow: 0 0 2px var(--theme-color) !important;}/* 侧边栏个人信息卡片动态渐变色 */#aside-content > .card-widget.card-info {  background: linear-gradient(    -45deg,    #e8d8b9,    #eccec5,    #a3e9eb,    #bdbdf0,    #eec1ea  );  box-shadow: 0 0 5px rgb(66, 68, 68);  position: relative;  background-size: 400% 400%;  -webkit-animation: Gradient 10s ease infinite;  -moz-animation: Gradient 10s ease infinite;  animation: Gradient 10s ease infinite !important;}@-webkit-keyframes Gradient {  0% {    background-position: 0% 50%;  }  50% {    background-position: 100% 50%;  }  100% {    background-position: 0% 50%;  }}@-moz-keyframes Gradient {  0% {    background-position: 0% 50%;  }  50% {    background-position: 100% 50%;  }  100% {    background-position: 0% 50%;  }}@keyframes Gradient {  0% {    background-position: 0% 50%;  }  50% {    background-position: 100% 50%;  }  100% {    background-position: 0% 50%;  }}/* 黑夜模式适配 */[data-theme="dark"] #aside-content > .card-widget.card-info {  background: #191919ee;}/* 个人信息Follow me按钮 */#aside-content > .card-widget.card-info > #card-info-btn {  background-color: #3eb8be;  border-radius: 8px;}]]></content>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>音乐</title>
+      <link href="/music/index.html"/>
+      <url>/music/index.html</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>about</title>
+      <link href="/about/index.html"/>
+      <url>/about/index.html</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>categories</title>
+      <link href="/categories/index.html"/>
+      <url>/categories/index.html</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title></title>
+      <link href="/css/universe.css"/>
+      <url>/css/universe.css</url>
+      
+        <content type="html"><![CDATA[/* 背景宇宙星光  */#universe{  display: block;  position: fixed;  margin: 0;  padding: 0;  border: 0;  outline: 0;  left: 0;  top: 0;  width: 100%;  height: 100%;  pointer-events: none;  /* 这个是调置顶的优先级的，-1在文章页下面，背景上面，个人推荐这种 */  z-index: -1;}]]></content>
       
     </entry>
     
@@ -267,28 +314,6 @@
       <title>movies</title>
       <link href="/movies/index.html"/>
       <url>/movies/index.html</url>
-      
-        <content type="html"><![CDATA[]]></content>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>音乐</title>
-      <link href="/music/index.html"/>
-      <url>/music/index.html</url>
-      
-        <content type="html"><![CDATA[]]></content>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>Gallery</title>
-      <link href="/Gallery/index.html"/>
-      <url>/Gallery/index.html</url>
       
         <content type="html"><![CDATA[]]></content>
       
